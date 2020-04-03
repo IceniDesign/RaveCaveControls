@@ -7,8 +7,8 @@
 #define buttonPin_BLUE    6
 #define buttonPin_YELLOW  7
 #define LED_PIN     12
-#define NUM_LEDS    30
-#define BRIGHTNESS  20
+#define NUM_LEDS    12
+#define BRIGHTNESS  30
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
 CRGB leds[NUM_LEDS];
