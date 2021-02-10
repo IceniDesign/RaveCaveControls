@@ -1,5 +1,4 @@
-#This is the script for playing back video based on 6 different button presses on a Raspberry Pi
-#https://icenidesign.com/toys/porthole/
+# Working but still set to different parts of the screen for troubleshooting
 
 #import the needed libraries
 import os
@@ -12,20 +11,23 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
 #Setup the GPIO buttons
-GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP) #YELLOW
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP) #RED
-GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP) #WHITE
-GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP) #BLUE
-GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP) #GREEN
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP) #BLACK
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP) #YELLOW #1
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP) #RED #2
+GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP) #WHITE #Quit
+GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP) #BLUE #3
+GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP) #GREEN #4
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP) #BLACK #5
 
 #VARIABLES
-movie1 = ("/home/pi/Videos/Loop_Videos/Space_u9TuAZHeziw_240p.mp4")
-movie2 = ("/home/pi/Videos/Loop_Videos/Clouds_0_jNjpVxUt0_240p.mp4")
+movie1 = ("/home/pi/Videos/Loop_Videos/Desert_1mexsOOHBSA_240p.mp4")
+movie2 = ("/home/pi/Videos/Loop_Videos/Sunset_A9cHouJRGsU_240p.mp4")
 movie3 = ("/home/pi/Videos/Loop_Videos/Fish_A2WqvBVCUJQ_360p.mp4")
-movie4 = ("/home/pi/Videos/Loop_Videos/Desert_1mexsOOHBSA_240p.mp4")
-movie5 = ("/home/pi/Videos/Loop_Videos/Sunset_A9cHouJRGsU_240p.mp4")
-Layer = 1 #this needs to be presented as a string not a variable
+movie4 = ("/home/pi/Videos/Loop_Videos/Clouds_0_jNjpVxUt0_240p.mp4")
+movie5 = ("/home/pi/Videos/Loop_Videos/Space_u9TuAZHeziw_240p.mp4")
+
+Layer = 1 #Initial layer value, this needs to be presented as a string not a variable, higher numbers on top
+WinSize = '600,100,900,400' #Size of video playback when debugging - x1,y1,x2,y2
+
 OMX1 = '' #Define them early so we can try and kill them even if they aren't running
 OMX1_active = False
 OMX2 = '' #Define them early so we can try and kill them even if they aren't running
@@ -40,8 +42,9 @@ OMX5_active = False
 #and off we go...
 os.system('killall omxplayer.bin') #kill OMX in case it is already running
 #Space = subprocess.Popen(['omxplayer', '--loop', '--win', '600,100,900,400', '--layer', str(Layer), movie2],stdin=subprocess.PIPE) #Load the 1st video
-OMX1_active = True
-OMX1 = subprocess.Popen(['omxplayer', '--loop', '--win', '600,100,900,400', '--layer', str(Layer), movie1],stdin=subprocess.PIPE) #Load the 1st video
+OMX5_active = True
+#OMX5 = subprocess.Popen(['omxplayer', '--loop', '--win', WinSize, '--layer', str(Layer), movie5],stdin=subprocess.PIPE) #Load the 1st video
+OMX5 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie5],stdin=subprocess.PIPE) #Load the 1st video
         
 while True:
     #Read states of the inputs
@@ -58,7 +61,7 @@ while True:
             #Play movie1
             Layer = Layer + 1
             OMX1_active = True
-            OMX1 = subprocess.Popen(['omxplayer', '--loop', '--win', '600,100,900,400', '--layer', str(Layer), movie1],stdin=subprocess.PIPE) #Load the 1st video
+            OMX1 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie1],stdin=subprocess.PIPE) #Load the 1st video
             time.sleep(5)
             if OMX2_active == True: #shutdown movie2 if it is playing
                 OMX2.stdin.write('q')
@@ -82,7 +85,7 @@ while True:
             #Play movie2
             Layer = Layer + 1
             OMX2_active = True
-            OMX2 = subprocess.Popen(['omxplayer', '--loop', '--win', '600,100,900,400', '--layer', str(Layer), movie2],stdin=subprocess.PIPE) #Load the 1st video
+            OMX2 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie2],stdin=subprocess.PIPE) #Load the 1st video
             time.sleep(5)
             if OMX1_active == True: #shutdown movie1 if it is playing
                 OMX1.stdin.write('q')
@@ -106,7 +109,7 @@ while True:
             #Play movie2
             Layer = Layer + 1
             OMX3_active = True
-            OMX3 = subprocess.Popen(['omxplayer', '--loop', '--win', '600,100,900,400', '--layer', str(Layer), movie3],stdin=subprocess.PIPE) #Load the 1st video
+            OMX3 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie3],stdin=subprocess.PIPE) #Load the 1st video
             time.sleep(5)
             if OMX1_active == True: #shutdown movie1 if it is playing
                 OMX1.stdin.write('q')
@@ -130,7 +133,7 @@ while True:
             #Play movie2
             Layer = Layer + 1
             OMX4_active = True
-            OMX4 = subprocess.Popen(['omxplayer', '--loop', '--win', '600,100,900,400', '--layer', str(Layer), movie4],stdin=subprocess.PIPE) #Load the 1st video
+            OMX4 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie4],stdin=subprocess.PIPE) #Load the 1st video
             time.sleep(5)
             if OMX1_active == True: #shutdown movie1 if it is playing
                 OMX1.stdin.write('q')
@@ -154,7 +157,7 @@ while True:
             #Play movie2
             Layer = Layer + 1
             OMX5_active = True
-            OMX5 = subprocess.Popen(['omxplayer', '--loop', '--win', '600,100,900,400', '--layer', str(Layer), movie5],stdin=subprocess.PIPE) #Load the 1st video
+            OMX5 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie5],stdin=subprocess.PIPE) #Load the 1st video
             time.sleep(5)
             if OMX1_active == True: #shutdown movie1 if it is playing
                 OMX1.stdin.write('q')
@@ -177,3 +180,4 @@ while True:
     if quit_video == False:
         os.system('killall omxplayer.bin')
         exit()
+
