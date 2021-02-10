@@ -264,10 +264,10 @@ try: #wrapped in a try loop so we can quit with a keyboard press if needed.
                 print("Spacestation Docking and Repairs.")
                 if IceniDebug == True:
                     #Load video 6 in a window
-                    OMX5 = subprocess.Popen(['omxplayer', '--loop', '--win', WinSize, '--layer', str(Layer), movie6],stdin=subprocess.PIPE) 
+                    OMX6 = subprocess.Popen(['omxplayer', '--loop', '--win', WinSize, '--layer', str(Layer), movie6],stdin=subprocess.PIPE) 
                 else: 
                     #Load video6 fullscreen
-                    OMX5 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie6],stdin=subprocess.PIPE)
+                    OMX6 = subprocess.Popen(['omxplayer', '--loop', '--layer', str(Layer), movie6],stdin=subprocess.PIPE)
                 time.sleep(5)
                 if OMX1_active == True: #shutdown movie1 if it is playing
                     OMX1.stdin.write('q')
